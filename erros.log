@@ -1,0 +1,16 @@
+[2025-10-04T03:17:55.718Z] [INFO]: Usuário inserido: alice.silva@teste.com
+--------------------------------------------------
+[2025-10-04T03:17:55.719Z] [ERROR]: Falha ao inserir novo Usuário: O campo "nome" é obrigatório.
+Detalhes: {
+  "dados": "{\"email\":\"bob.falha@teste.com\",\"senha\":\"senhaForte\"}",
+  "stack": "Error: O campo \"nome\" é obrigatório.\n    at Usuario.validate (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\Usuario.js:15:19)\n    at Usuario.inserirUsuario (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\Usuario.js:28:18)\n    at testarInsercaoUsuario (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\index.js:39:30)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+}
+--------------------------------------------------
+[2025-10-04T03:19:09.540Z] [INFO]: Usuário inserido: alice.silva@teste.com
+--------------------------------------------------
+[2025-10-04T03:19:09.541Z] [ERROR]: Falha ao inserir novo Usuário: O campo "nome" é obrigatório.
+Detalhes: {
+  "dados": "{\"email\":\"bob.falha@teste.com\",\"senha\":\"senhaForte\"}",
+  "stack": "Error: O campo \"nome\" é obrigatório.\n    at Usuario.validate (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\usuario.js:15:19)\n    at Usuario.inserirUsuario (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\usuario.js:28:18)\n    at testarInsercaoUsuario (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\index.js:39:30)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+}
+--------------------------------------------------
