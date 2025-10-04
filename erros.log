@@ -14,3 +14,15 @@ Detalhes: {
   "stack": "Error: O campo \"nome\" é obrigatório.\n    at Usuario.validate (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\usuario.js:15:19)\n    at Usuario.inserirUsuario (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\usuario.js:28:18)\n    at testarInsercaoUsuario (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\index.js:39:30)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
 }
 --------------------------------------------------
+[2025-10-04T13:36:37.567Z] [ERROR]: Falha ao inserir novo Vídeo: O campo "titulo" é obrigatório.
+Detalhes: {
+  "dados": "{\"url\":\"fail.com\",\"idUsuario\":\"68e122e5c21bd0795b9ca895\"}",
+  "stack": "Error: O campo \"titulo\" é obrigatório.\n    at Video.validate (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\video.js:13:19)\n    at Video.inserirVideo (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\video.js:27:18)\n    at executarTestes (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\index.js:77:28)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+}
+--------------------------------------------------
+[2025-10-04T13:36:37.568Z] [ERROR]: Falha ao inserir novo Usuário: O campo "email" é obrigatório para deletar.
+Detalhes: {
+  "dados": "{\"nome\":\"sem email\"}",
+  "stack": "Error: O campo \"email\" é obrigatório para deletar.\n    at Usuario.deletarUsuario (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\usuario.js:61:24)\n    at executarTestes (C:\\Users\\Bruno\\OneDrive\\Documentos\\projetos-web\\Back-end_Projeto1_Video-Streaming\\index.js:85:30)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+}
+--------------------------------------------------
