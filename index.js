@@ -42,6 +42,15 @@ async function testarInsercaoUsuario() {
             // O erro deve ser capturado aqui e logado pela sua classe Usuario
             console.log(`SUCESSO: Falha de validação esperada: ${error.message}`);
         }
+
+        const encontrado = await usuarioDAO.buscarUsuario({ email: "alice.silva@teste.com" });
+        console.log("Usuário encontrado:", encontrado);
+
+        const apagado = await usuarioDAO.deletarUsuario({ email: "alice.silva@teste.com" });
+        console.log("Usuários deletados:", apagado);
+
+        const encontrado2 = await usuarioDAO.buscarUsuario({ nome: "Alice Silva" });
+        console.log("Usuário encontrado:", encontrado2);
         
     } catch (e) {
         console.error("ERRO FATAL NA EXECUÇÃO DO TESTE:", e.message);

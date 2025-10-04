@@ -43,7 +43,42 @@ class Usuario {
     }
 
     // Implemente os métodos de busca e deleção aqui...
-    
+    async buscarUsuario(dados) {
+        try {
+            // Tenta inserir no MongoDB
+            const result = await this.collection.findOne(dados);
+            return result; // Retorna o ID gerado
+
+        } catch (error) {
+            // Trata e loga a exceção (REQUISITO DO PROJETO)
+            logger.error(`Falha ao inserir novo Usuário: ${error.message}`, { 
+                dados: JSON.stringify(dados),
+                stack: error.stack 
+            });
+            // Re-lança um erro mais genérico para quem chamou
+            throw new Error(`Erro ao cadastrar usuário: ${error.message}`);
+        }
+    }
+
+    async deletarUsuario(dados) {
+        try {
+            if (!dados.email || dados.email.trim() === '') {
+                 throw new Error('O campo "email" é obrigatório para deletar.');
+            }
+
+        const result = await this.collection.deleteMany({ email: dados.email });
+        return result.deletedCount; // 1 se deletou, 0 se não achou
+
+        } catch (error) {
+            // Trata e loga a exceção (REQUISITO DO PROJETO)
+            logger.error(`Falha ao inserir novo Usuário: ${error.message}`, { 
+                dados: JSON.stringify(dados),
+                stack: error.stack 
+            });
+            // Re-lança um erro mais genérico para quem chamou
+            throw new Error(`Erro ao cadastrar usuário: ${error.message}`);
+        }
+    }
 }
 
 module.exports = Usuario;
