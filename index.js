@@ -1,10 +1,11 @@
+
 const { connectDB, client } = require('./db');
 const Usuario = require('./usuario'); 
 const Video = require('./video');
 const Comentario = require('./comentario');
-const logger = require('./logger_custom');
 
-async function executarTestes() {
+// Função principal de demonstração
+async function demonstrarFuncionalidades() {
     let db;
     let novoUsuarioId;
     let novoVideoId;
@@ -14,69 +15,82 @@ async function executarTestes() {
         const usuarioDAO = new Usuario(db); 
         const videoDAO = new Video(db);
         const comentarioDAO = new Comentario(db);
-        console.log("\n--- INICIANDO TESTES DE INTEGRAÇÃO ---");        
 
-        const dadosUsuario = { nome: "Alice Channel", email: "alice@canal.com", senha: "senha_do_canal" };
+        // 1.1. Inserção de um Novo Usuário
+        const dadosUsuario = { nome: "Canal Tech Pro", email: "tech@pro.com", senha: "securePass123" };
         novoUsuarioId = await usuarioDAO.inserirUsuario(dadosUsuario);
-        console.log(`SUCESSO: Usuário cadastrado. ID: ${novoUsuarioId}`);
+        console.log(` -> Usuário 'tech@pro.com' cadastrado com ID: ${novoUsuarioId}`);
         
-
+        // 1.2. Inserção de um Novo Vídeo
         const dadosVideo = {
-            titulo: "Meu Primeiro Vlog",
-            descricao: "Um vídeo sobre como programar um back-end!",
-            url: "https://youtube.com/vlog1",
-            idUsuario: novoUsuarioId 
+            titulo: "Node.js com MongoDB: Guia Rápido",
+            descricao: "Demonstração de classes de acesso a dados em Node.js.",
+            url: "https://youtube.com",
+            idUsuario: novoUsuarioId, 
+            tempo: "15:30"
         };
         novoVideoId = await videoDAO.inserirVideo(dadosVideo);
-        console.log(`SUCESSO: Vídeo upado. ID: ${novoVideoId}`);
+        console.log(` -> Vídeo '${dadosVideo.titulo}' upado com sucesso. ID: ${novoVideoId}`);
 
+        // 1.3. Inserção de um Novo Comentário
         const dadosComentario = {
-            texto: "Ótimo tutorial!",
+            texto: "Excelente conteúdo, muito claro.",
             idUsuario: novoUsuarioId, 
-            idVideo: novoVideoId 
+            idVideo: novoVideoId
         };
         const novoComentarioId = await comentarioDAO.inserirComentario(dadosComentario);
-        console.log(`SUCESSO: Comentário publicado. ID: ${novoComentarioId}`);
+        console.log(` -> Comentário publicado no vídeo. ID: ${novoComentarioId}`);
 
+        // 2.1. Buscar o Usuário inserido por ID
         const usuarioEncontrado = await usuarioDAO.buscarUsuario({ _id: novoUsuarioId });
-        console.log(`\nBUSCA USUÁRIO: Encontrado: ${usuarioEncontrado.nome} (Email: ${usuarioEncontrado.email})`);
+        console.log(` -> Busca Usuário: Encontrado: ${usuarioEncontrado.nome}`);
 
-        const videosBusca = await videoDAO.buscarVideosPorPalavraChave("programar");
-        console.log(`BUSCA VÍDEO: Encontrado ${videosBusca.length} vídeo(s) com a palavra 'programar'.`);
+        // 2.2. Buscar Vídeos por Palavra-Chave
+        const videosBusca = await videoDAO.buscarVideosPorPalavraChave("Guia Rápido");
+        console.log(` -> Busca Vídeo: Encontrado ${videosBusca.length} vídeo(s) com a palavra-chave.`);
 
+        // 2.3. Buscar Comentários de um Vídeo
         const comentariosBusca = await comentarioDAO.buscarComentariosPorVideo(novoVideoId);
-        console.log(`BUSCA COMENTÁRIO: Encontrado ${comentariosBusca.length} comentário(s) no vídeo.`);
+        console.log(` -> Busca Comentário: Encontrado ${comentariosBusca.length} comentário(s) para o vídeo.`);
 
-        console.log("\n--- TESTANDO VALIDAÇÕES DE ERRO (DEVE FALHAR E GERAR LOG) ---");
-
+        // 3.1. Teste de Falha: Inserir Vídeo SEM TÍTULO
         try {
+            console.log(" -> Tentando inserir Vídeo sem Título...");
             await videoDAO.inserirVideo({ url: "fail.com", idUsuario: novoUsuarioId });
-            console.log("FALHA: Validação de Vídeo falhou, inseriu sem título.");
+            console.log("   [ERRO]: A validação falhou, o vídeo foi inserido."); // Se essa linha rodar, algo está errado
         } catch (error) {
-            console.log(`SUCESSO DE ERRO: Vídeo falhou (Motivo: ${error.message}). VERIFIQUE O ARQUIVO 'erros.log'.`);
+            console.log(`   [VALIDAÇÃO OK]: Operação rejeitada. Motivo: ${error.message}`);
+            console.log("   (Erro registrado em 'erros.log' conforme requisito)");
         }
 
+        // 3.2. Teste de Falha: Inserir Comentário SEM ID DO VÍDEO
         try {
-            await usuarioDAO.deletarUsuario({ nome: "sem email" });
-            console.log("FALHA: Validação de Deleção de Usuário falhou, tentou deletar sem email.");
+            console.log(" -> Tentando inserir Comentário sem ID do Vídeo...");
+            await comentarioDAO.inserirComentario({ texto: "teste", idUsuario: novoUsuarioId });
+            console.log("   [ERRO]: A validação falhou, o comentário foi inserido.");
         } catch (error) {
-            console.log(`SUCESSO DE ERRO: Deleção de Usuário falhou (Motivo: ${error.message}).`);
+            console.log(`   [VALIDAÇÃO OK]: Operação rejeitada. Motivo: ${error.message}`);
+            console.log("   (Erro registrado em 'erros.log' conforme requisito)");
         }
-        
-        console.log("\n--- EXECUTANDO TESTES DE DELEÇÃO ---");
-        
-        const deletados = await usuarioDAO.deletarUsuario({ email: "alice@canal.com" });
-        console.log(`✅ SUCESSO: Foram deletados ${deletados} usuário(s) (Alice).`);
+
+        // 4.1. Deletar o Vídeo
+        const deletadosVideo = await videoDAO.deletarVideo(novoVideoId);
+        console.log(` -> Vídeo deletado: ${deletadosVideo} registro(s) removido(s).`);
+
+        // 4.2. Deletar o Usuário
+        const deletadosUsuario = await usuarioDAO.deletarUsuario({ email: "tech@pro.com" });
+        console.log(` -> Usuário deletado: ${deletadosUsuario} registro(s) removido(s).`);
         
     } catch (e) {
-        logger.error("ERRO FATAL NO SISTEMA:", { mensagem: e.message, stack: e.stack });
-        console.error("\nERRO FATAL NA EXECUÇÃO DO TESTE:", e.message);
+        // Captura erros críticos (como falha de conexão) e encerra
+        console.error("\n[ERRO CRÍTICO] A aplicação encontrou uma falha fatal:", e.message);
     } finally {
+        // Garante que o cliente seja fechado
         if (client) {
             await client.close();
-            console.log("\n--- TESTES CONCLUÍDOS. Conexão com o MongoDB fechada. ---");
+            console.log("Conexão com o MongoDB encerrada.");
         }
     }
 }
 
-executarTestes();
+demonstrarFuncionalidades();
