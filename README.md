@@ -12,3 +12,6 @@ O projeto deve envolver a definição das classes necessárias para armazenar as
  - Verificação de preenchimento de campos obrigatórios;
  - Tratamento de excessões lançadas pelas bibliotecas;
  - Armazenamento de arquivos de log com as excessões capturadas.
+
+## Execução:
+ - Utilize node index.js para rodar o programa (o arquivo index.js contém alguns testes de busca, inserção e exclusão das classes criadas) 
