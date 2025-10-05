@@ -22,8 +22,6 @@ class Usuario {
         try {
             
             this.validate(dados);
-            
-            // Tenta inserir no MongoDB
             const result = await this.collection.insertOne(dados);
             return result.insertedId;
 

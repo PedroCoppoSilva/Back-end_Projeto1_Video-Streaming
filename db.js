@@ -1,6 +1,4 @@
 const { MongoClient } = require('mongodb');
-
-// Mantenha a URL do seu banco de dados
 const uri = "mongodb://localhost:27017"; 
 const client = new MongoClient(uri);
 
