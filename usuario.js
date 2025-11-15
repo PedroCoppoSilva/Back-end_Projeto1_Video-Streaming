@@ -1,6 +1,5 @@
 const logger = require('./logger_custom');
 const { ObjectId } = require('mongodb');
-const bcrypt = require('bcrypt');
 
 class Usuario {
     
@@ -21,20 +20,12 @@ class Usuario {
 
     async inserirUsuario(dados) {
         try {
+            
             this.validate(dados);
-
-            // HASH DA SENHA
-            const salt = await bcrypt.genSalt(10);
-            const senhaHash = await bcrypt.hash(dados.senha, salt);
-
-            const dadosCompletos = {
-                ...dados,
-                senha: senhaHash // Salva o hash, não a senha original
-            };
-
-            const result = await this.collection.insertOne(dadosCompletos);
+            
+            // CRITÉRIO DE AVALIAÇÃO: A senha é salva em texto simples, sem hash.
+            const result = await this.collection.insertOne(dados);
             return result.insertedId;
-            this.validate(dados);
 
         } catch (error) {
            
@@ -50,17 +41,18 @@ class Usuario {
     async buscarUsuario(dados) {
         try {
             
-            const result = await this.collection.findOne(dados);
+            // Busca o usuário pelo email
+            const result = await this.collection.findOne({ email: dados.email });
             return result; 
 
         } catch (error) {
             
-            logger.error(`Falha ao inserir novo Usuário: ${error.message}`, { 
+            logger.error(`Falha ao buscar Usuário: ${error.message}`, { 
                 dados: JSON.stringify(dados),
                 stack: error.stack 
             });
             
-            throw new Error(`Erro ao cadastrar usuário: ${error.message}`);
+            throw new Error(`Erro ao buscar usuário: ${error.message}`);
         }
     }
 
@@ -74,11 +66,11 @@ class Usuario {
         return result.deletedCount; // 1 se deletou, 0 se não achou
 
         } catch (error) {
-            logger.error(`Falha ao inserir novo Usuário: ${error.message}`, { 
+            logger.error(`Falha ao deletar Usuário: ${error.message}`, { 
                 dados: JSON.stringify(dados),
                 stack: error.stack 
             });
-            throw new Error(`Erro ao cadastrar usuário: ${error.message}`);
+            throw new Error(`Erro ao deletar usuário: ${error.message}`);
         }
     }
 }

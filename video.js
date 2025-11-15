@@ -38,7 +38,24 @@ class Video {
             throw new Error(`Erro ao enviar vídeo: ${error.message}`);
         }
     }
+    
+    async buscarVideoPorId(idVideo) {
+        try {
+            if (!idVideo) {
+                throw new Error('O idVideo é obrigatório para a busca.');
+            }
+            const videoId = (typeof idVideo === 'string' && ObjectId.isValid(idVideo)) ? new ObjectId(idVideo) : idVideo;
+            const video = await this.collection.findOne({ _id: videoId });
+            return video; // Retorna o vídeo ou null se não for encontrado
 
+        } catch (error) {
+            logger.error(`Falha ao buscar vídeo por ID: ${error.message}`, { 
+                idVideo: idVideo,
+                stack: error.stack 
+            });
+            throw new Error(`Erro na busca de vídeo: ${error.message}`);
+        }
+    }
     async buscarVideosPorPalavraChave(termo) {
         try {
             if (!termo || termo.trim() === '') {
