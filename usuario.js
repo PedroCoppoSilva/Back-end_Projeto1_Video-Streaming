@@ -1,5 +1,6 @@
 const logger = require('./logger_custom');
 const { ObjectId } = require('mongodb');
+const bcrypt = require('bcrypt');
 
 class Usuario {
     
@@ -20,10 +21,20 @@ class Usuario {
 
     async inserirUsuario(dados) {
         try {
-            
             this.validate(dados);
-            const result = await this.collection.insertOne(dados);
+
+            // HASH DA SENHA
+            const salt = await bcrypt.genSalt(10);
+            const senhaHash = await bcrypt.hash(dados.senha, salt);
+
+            const dadosCompletos = {
+                ...dados,
+                senha: senhaHash // Salva o hash, não a senha original
+            };
+
+            const result = await this.collection.insertOne(dadosCompletos);
             return result.insertedId;
+            this.validate(dados);
 
         } catch (error) {
            
